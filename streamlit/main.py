@@ -56,9 +56,26 @@ def run():
     
     if st.button('Prediksi'):
         if sentence.strip():
+            # Prediksi label dan confidence
             predicted_label, confidence = predict(sentence)
-            st.write(f"**Prediksi Sentimen:** {predicted_label}")
-            st.write(f"**Confidence:** {confidence:.2f}")
+            
+            # Format the confidence as percentage
+            confidence_percentage = f"{confidence*100:.2f}%"
+            
+            # Set color based on the label
+            if predicted_label == "positive":
+                color = "green"
+                formatted_label = f"**{confidence_percentage} Positif**"
+            elif predicted_label == "negative":
+                color = "red"
+                formatted_label = f"**{confidence_percentage} Negatif**"
+            else:
+                color = "gray"
+                formatted_label = f"**{confidence_percentage} Netral**"
+
+            # Display the result with colored text
+            st.markdown(f"<p style='color:{color};'>{formatted_label}</p>", unsafe_allow_html=True)
+
         else:
             st.write("Silakan masukkan teks terlebih dahulu!")
 
