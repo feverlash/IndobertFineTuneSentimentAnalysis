@@ -1,5 +1,5 @@
 import streamlit as st
-from transformers import TFBertForSequenceClassification, AutoTokenizer
+from transformers import TFBertModelForSequenceClassification, AutoTokenizer
 import tensorflow as tf
 
 # Load the model and tokenizer from Hugging Face
@@ -7,7 +7,7 @@ model_name = "feverlash/Indonesian-SentimentAnalysis-Model"
 
 # Load pre-trained model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = TFBertForSequenceClassification.from_pretrained(model_name)
+model = TFBertModelForSequenceClassification.from_pretrained(model_name)
 
 # Sentiment mapping
 sentiment_mapping = {
@@ -47,33 +47,37 @@ def predict(text):
     
     return predicted_label, confidence
 
-st.title('Identifikasi Sentimen dari Suatu Kalimat')
-st.write("Masukkan teks untuk mengidentifikasi apakah sentimen tersebut positif, negatif, atau netral.")
+def run():
+    st.title('Identifikasi Sentimen dari Suatu Kalimat')
+    st.write("Masukkan teks untuk mengidentifikasi apakah sentimen tersebut positif, negatif, atau netral.")
 
-# Input text from the user
-sentence = st.text_input('Masukkan Teks Anda')
+    # Input text from the user
+    sentence = st.text_input('Masukkan Teks Anda')
+    
+    if st.button('Prediksi'):
+        if sentence.strip():
+            # Prediksi label dan confidence
+            predicted_label, confidence = predict(sentence)
+            
+            # Format the confidence as percentage
+            confidence_percentage = f"{confidence*100:.2f}%"
+            
+            # Set color based on the label
+            if predicted_label == "positive":
+                color = "green"
+                formatted_label = f"{confidence_percentage} Positif"
+            elif predicted_label == "negative":
+                color = "red"
+                formatted_label = f"{confidence_percentage} Negatif"
+            else:
+                color = "gray"
+                formatted_label = f"{confidence_percentage} Netral"
 
-if st.button('Prediksi'):
-    if sentence.strip():
-        # Prediksi label dan confidence
-        predicted_label, confidence = predict(sentence)
-        
-        # Format the confidence as percentage
-        confidence_percentage = f"{confidence*100:.2f}%"
-        
-        # Set color based on the label
-        if predicted_label == "positive":
-            color = "green"
-            formatted_label = f"<strong>{confidence_percentage} Positif</strong>"
-        elif predicted_label == "negative":
-            color = "red"
-            formatted_label = f"<strong>{confidence_percentage} Negatif</strong>"
+            # Display the result with colored text
+            st.markdown(f"<p style='color:{color};'>{formatted_label}</p>", unsafe_allow_html=True)
+
         else:
-            color = "gray"
-            formatted_label = f"<strong>{confidence_percentage} Netral</strong>"
+            st.write("Silakan masukkan teks terlebih dahulu!")
 
-        # Display the result with bold and colored text
-        st.markdown(f"<p style='color:{color};'>{formatted_label}</p>", unsafe_allow_html=True)
-
-    else:
-        st.write("Silakan masukkan teks terlebih dahulu!")
+if __name__ == '__main__':
+    run()
