@@ -65,15 +65,15 @@ def run():
             # Set color based on the label
             if predicted_label == "positive":
                 color = "green"
-                formatted_label = f"**{confidence_percentage} Positif**"
+                formatted_label = f"<strong>{confidence_percentage} Positif</strong>"
             elif predicted_label == "negative":
                 color = "red"
-                formatted_label = f"**{confidence_percentage} Negatif**"
+                formatted_label = f"<strong>{confidence_percentage} Negatif</strong>"
             else:
                 color = "gray"
-                formatted_label = f"**{confidence_percentage} Netral**"
+                formatted_label = f"<strong>{confidence_percentage} Netral</strong>"
 
-            # Display the result with colored text
+            # Display the result with bold and colored text
             st.markdown(f"<p style='color:{color};'>{formatted_label}</p>", unsafe_allow_html=True)
 
         else:
