@@ -1,5 +1,5 @@
 import streamlit as st
-from transformers import TFAutoModelForSequenceClassification, AutoTokenizer
+from transformers import TFBertForSequenceClassification, AutoTokenizer
 import tensorflow as tf
 
 # Load the model and tokenizer from Hugging Face
@@ -7,7 +7,7 @@ model_name = "feverlash/Indonesian-SentimentAnalysis-Model"
 
 # Load pre-trained model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = TFAutoModelForSequenceClassification.from_pretrained(model_name)
+model = TFBertForSequenceClassification.from_pretrained(model_name)
 
 # Sentiment mapping
 sentiment_mapping = {
